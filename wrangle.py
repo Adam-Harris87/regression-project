@@ -18,6 +18,9 @@ import warnings
 warnings.filterwarnings("ignore")
 
 def get_db_url(db_name, host=env.host, user=env.user, password=env.password):
+    '''
+    create a connection url string for connecting to the codeup database
+    '''
     url = f'mysql+pymysql://{user}:{password}@{host}/{db_name}'
     return url
 
@@ -169,7 +172,6 @@ def impute_region(train, validate, test):
         validate[validate.fips == 6111])
     test[test.fips == 6111] = region_imputer.transform(
         test[test.fips == 6111])
-    
     
     # converting column datatypes
     # change dtypes of columns to int
