@@ -7,6 +7,8 @@ from sklearn.linear_model import LinearRegression, LassoLars, TweedieRegressor
 from sklearn.preprocessing import PolynomialFeatures
 from sklearn.feature_selection import SelectKBest, f_regression, RFE
 
+import matplotlib.pyplot as plt
+
 def get_baseline_model(y_train):
     y_train['tax_value_pred_mean'] = y_train.tax_value.mean()
     rmse_train_mu = mean_squared_error(y_train.tax_value,
@@ -125,3 +127,26 @@ def get_polynomial_test(lm2, X_test_degree2, y_test):
     print('Polynomial Model on Test Data')
     print(f'RMSE on test data: {rmse_test:.08}')
     print(f'R^2 value: {r_2:0.4}')
+
+    return y_test
+
+def get_pred_error_plot(y_test):
+    plt.figure(figsize=(16,8))
+    plt.axhline(label="No Error")
+
+    plt.scatter(y_test.tax_value, (y_test.tax_value_pred_lm2 - y_test.tax_value), 
+                alpha=.5, color="grey", s=100, label="Model 2nd degree Polynomial")
+
+    plt.xticks(ticks=[0,200_000,400_000,600_000,800_000,1_000_000], 
+               labels=['0', '200,000', '400,000', '600,000', '800,000', '1,000,000'],
+               size = 12)
+    plt.yticks(size=12,
+               ticks=[600_000, 400_000, 200_000, 0, -200_000, -400_000, 
+                      -600_000, -800_000, -1_000_000],
+               labels=['600,000', '400,000', '200,000', '0', '-200,000', '-400,000', 
+                      '-600,000', '-800,000', '-1,000,000'])
+    plt.xlabel('Actual Home Value (Dollars)', size=14)
+    plt.ylabel('Prediction Error (Dollars)', size=14)
+    plt.title('Prediction Error of Polynomial Regression Model', size=16)
+    plt.legend(loc=1)
+    plt.show()
