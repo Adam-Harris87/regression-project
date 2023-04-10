@@ -44,3 +44,23 @@ def get_area_value(train):
 def get_pearson_area(train):
     r, p = pearsonr(train.area, train.tax_value)
     check_p(p, r)
+
+def get_lot_bin_vis(train):    
+    sns.catplot(data=train, x='lot_size_binned', y='tax_value', kind='violin')
+    plt.xticks(rotation=90)
+    plt.axhline(train.tax_value.mean(), color='red', label='tax value mean')
+    plt.title('Tax Value by Property Lot Size', size=15)
+    plt.xlabel('Property Lot Size (sqft) in Bins', size=14)
+    plt.ylabel('Tax Valuation (Dollars)', size=14)
+    plt.legend()
+    plt.yticks(ticks=[0,200_000,400_000,600_000,800_000,1_000_000], 
+               labels=['0', '200,000', '400,000', '600,000', '800,000', '1,000,000'])
+    plt.show()
+
+def get_cars_by_sqft(train):
+    sns.relplot(data=train, x='garage_sqft', y='cars_garage', 
+                kind='line', ci=False, color='blue')
+    plt.title('Number of Cars That Fit in Garage by Garage sqft', size=14)
+    plt.ylabel('Number of Cars That Fit In Garage', size=14)
+    plt.xlabel('Garage Square Footage', size=14)
+    plt.show()
