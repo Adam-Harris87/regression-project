@@ -108,22 +108,6 @@ def clean_zillow_sfr(df,
     pool_imputer.fit(df[['pools']])
     df.pools = pool_imputer.transform(df[['pools']])
 
-    # fill in the region blanks with the most common region_id
-    # by each fips code
-    region_imputer = SimpleImputer(strategy='most_frequent')
-    region_imputer.fit(df[df.fips == 6037])
-    df[df.fips == 6037] = region_imputer.transform(df[df.fips == 6037])
-    region_imputer.fit(df[df.fips == 6059])
-    df[df.fips == 6059] = region_imputer.transform(df[df.fips == 6059])
-    region_imputer.fit(df[df.fips == 6111])
-    df[df.fips == 6111] = region_imputer.transform(df[df.fips == 6111])
-    
-    # converting column datatypes
-    # change dtypes of columns to int
-    int_list = df.drop(columns=['bathrooms']).columns.to_list()
-    for col in int_list:
-        df[col] = df[col].astype(int)
-    
     # lets put lot_size into bins so there aren't so many outliers
     bins = [0,1000,2000,3000,4000,5000,6000,7000,8000,9000,10000,11000,12000,np.inf]
     df['lot_size_binned'] = pd.cut(df.lot_size, bins)
@@ -152,6 +136,45 @@ def wrangle_zillow():
     return split_zillow(
         clean_zillow_sfr(
             acquire_zillow_sfr()))
+
+def impute_region(train, validate, test):
+    # fill in the region blanks with the most common region_id
+    # by each fips code
+    region_imputer = SimpleImputer(strategy='most_frequent')
+    
+    region_imputer.fit(train[train.fips == 6037])
+    train[train.fips == 6037] = region_imputer.transform(
+        train[train.fips == 6037])
+    validate[validate.fips == 6037] = region_imputer.transform(
+        validate[validate.fips == 6037])
+    test[test.fips == 6037] = region_imputer.transform(
+        test[test.fips == 6037])
+    
+    region_imputer.fit(train[train.fips == 6059])
+    train[train.fips == 6059] = region_imputer.transform(
+        train[train.fips == 6059])
+    validate[validate.fips == 6059] = region_imputer.transform(
+        validate[validate.fips == 6059])
+    test[test.fips == 6059] = region_imputer.transform(
+        test[test.fips == 6059])
+    
+    region_imputer.fit(train[train.fips == 6111])
+    train[train.fips == 6111] = region_imputer.transform(
+        train[train.fips == 6111])
+    validate[validate.fips == 6111] = region_imputer.transform(
+        validate[validate.fips == 6111])
+    test[test.fips == 6111] = region_imputer.transform(
+        test[test.fips == 6111])
+    
+    
+    # converting column datatypes
+    # change dtypes of columns to int
+    int_list = train.drop(columns=['bathrooms', 'lot_size_binned']).columns.to_list()
+    for col in int_list:
+        train[col] = train[col].astype(int)
+        validate[col] = validate[col].astype(int)
+        test[col] = test[col].astype(int)
+
 
 def scale_data(train, 
                validate, 
@@ -192,3 +215,8 @@ def scale_data(train,
         return scaler, train_scaled, validate_scaled, test_scaled
     else:
         return train_scaled, validate_scaled, test_scaled
+    
+def impute_and_scale(train, validate, test):
+    impute_region(train, validate, test)
+    train_scaled, validate_scaled, test_scaled = scale_data(train, validate, test)
+    return train_scaled, validate_scaled, test_scaled
