@@ -10,15 +10,25 @@ import seaborn as sns
 
 
 def check_p(p, r, α=0.05):
+    '''
+    check to see if the inputed p-value is less than an alpha of 0.05, 
+    if it is then reject the null hypothesis and display the r score
+    '''
+    # check if p-value is less than alpha
     if p < α:
+        # reject null hypothesis if p less then alpha
         print('there is sufficient evidence to reject our null hypothesis')
         print(f'the p-value is {p}')
         print(f'the r coeficient is {r}')
     else:
+        # fail to reject null hypothesis if p greater than alpha
         print('we fail to reject our null hypothesis')
         print(f'the p-value is {p}')
 
 def get_cars_value(train):    
+    '''
+    display a visualization of cars_garage by tax_value
+    '''
     sns.relplot(data=train, x='cars_garage', y='tax_value', 
                 kind='line', ci=False, color='blue')
     plt.axhline(train.tax_value.mean(), color='red')
@@ -29,10 +39,16 @@ def get_cars_value(train):
     plt.show()
 
 def get_pearson_garage(train):
+    '''
+    run a statistical test to see if garage_sqft has a linear correlation with tax value
+    '''
     r, p = pearsonr(train.garage_sqft, train.tax_value)
     check_p(p,r)
 
 def get_area_value(train):  
+    '''
+    display a visualization of structure square footage by tax value
+    '''
     plt.hexbin(data=train, x='area', y='tax_value', gridsize=10, cmap='Blues')
     plt.xlabel('Square Footage of House', size =14)
     plt.ylabel('Tax Value of House (Dollars)', size=14)
@@ -42,10 +58,16 @@ def get_area_value(train):
     plt.show()
 
 def get_pearson_area(train):
+    '''
+    run a statistical test to see if there is a linear correlation between area and tax value
+    '''
     r, p = pearsonr(train.area, train.tax_value)
     check_p(p, r)
 
-def get_lot_bin_vis(train):    
+def get_lot_bin_vis(train):  
+    '''
+    display a visualization of property lot size (binned) and tax value
+    '''  
     sns.catplot(data=train, x='lot_size_binned', y='tax_value', kind='violin')
     plt.xticks(rotation=90)
     plt.axhline(train.tax_value.mean(), color='red', label='tax value mean')
@@ -58,6 +80,9 @@ def get_lot_bin_vis(train):
     plt.show()
 
 def get_cars_by_sqft(train):
+    '''
+    display a visualization of garage square footage by cars taht fit in the garage
+    '''
     sns.relplot(data=train, x='garage_sqft', y='cars_garage', 
                 kind='line', ci=False, color='blue')
     plt.title('Number of Cars That Fit in Garage by Garage sqft', size=14)
