@@ -48,3 +48,8 @@ All project files will need to be located together in the same directory. Run th
 
 
 # Key findings, recommendations, and takeaways from your project.
+
+- Square footage of the house has the strongest correlation to the property's tax value
+- Square footage of the garage has a very strong correlation to the number of cars that fit in the garage
+- Number of cars that fit in the garage has a moderate correlation to the property tax value
+- Square footage of the property's lot has a very weak correlation to the tax value
