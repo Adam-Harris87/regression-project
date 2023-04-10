@@ -17,6 +17,10 @@ from sklearn.impute import SimpleImputer
 import warnings
 warnings.filterwarnings("ignore")
 
+def get_db_url(db_name, host=env.host, user=env.user, password=env.password):
+    url = f'mysql+pymysql://{user}:{password}@{host}/{db_name}'
+    return url
+
 def acquire_zillow_sfr():
     '''
     This function will retrieve zillow home data for 2017 properties. It will only get
@@ -51,7 +55,7 @@ SELECT bedroomcnt, bathroomcnt, calculatedfinishedsquarefeet,
 FROM cte_sfr
 ;
         '''
-        connection = env.get_db_url('zillow')
+        connection = get_db_url('zillow')
         df = pd.read_sql(query, connection)
         df.to_csv('zillow_2017_sfr.csv')
     
