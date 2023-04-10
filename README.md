@@ -5,7 +5,7 @@ In this project we will be looking at a dataset of predicted home tax values fro
 
 # Project goals
 
-We will be attempting to improve the tax value predictions for properties that had transactions in 2017.
+We will be attempting to improve the tax value predictions for properties that had transactions in 2017. We will also be looking to identify some of the drivers of tax value.
 
 
 # Project planning
@@ -14,7 +14,7 @@ Planning - The project planning will be laid out in this readme
 
 Acquisition - Data will be acquired via SQL function from the codeup server. Once the data is initially acquired, a telco.csv will be created in the user's local directory and reference instead of the SQL when accessed after the first time.
 
-Preparation - .
+Preparation - Null values in the garage_sqft, cars_garage and pools fields will be filled with 0. Null values in the region field will be filled with the most frequent values based on the fips code of the property. The bedrooms, bathrooms, area, cars_garage, garage_sqft and year_built fields will be scaled using a MinMaxScaler.
 
 Exploration - We will explore the data using various graphs, charts and visualizations in order to see if we can visually determine fields which will have a large impact upon predicting churn rate. We will then perform hypothesis testing in order to check if our visual determination of impactful fields is statistically accurate. We will finally choose a number of fields that have the most correlation to our churn target to use with our machine learning models.
 
@@ -35,6 +35,7 @@ Does the number of cars that fit in the garage correlate to the size of the gara
 
 # Data dictionary
 
+![alt text](https://github.com/Adam-Harris87/regression-project/blob/main/data_dictionary.png)
 
 # Instructions on how to reproduce the project and findings
 
